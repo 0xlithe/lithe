@@ -144,7 +144,7 @@ export function SplycProjectInfo() {
           )}
         </p>
       ))}
-      <p className="flex flex-wrap items-center gap-4">
+      <div className="flex flex-wrap items-center gap-4">
         <Link
           href="/portfolio"
           className="inline-flex items-center gap-2 text-[var(--lithe-secondary)] hover:text-[var(--lithe-primary)] transition-colors"
@@ -154,7 +154,7 @@ export function SplycProjectInfo() {
           </AnimateIcon>
         </Link>
         <InteractiveHoverButton href="https://splyc.app">View project</InteractiveHoverButton>
-      </p>
+      </div>
     </motion.div>
   )
 }
