@@ -1,6 +1,8 @@
 import { CustomPixelHeader } from '@/components/CustomPixelHeader'
 import { SplycProjectInfo } from '@/components/SplycProjectInfo'
+import { HoneydewProjectInfo } from '@/components/HoneydewProjectInfo'
 import SplycVideoSection from '@/components/SplycVideoSection'
+import HoneydewVideoSection from '@/components/HoneydewVideoSection'
 import { EXIT_OFFSET_PORTFOLIO } from '@/lib/site-config'
 
 export default function PortfolioProjectPage({
@@ -9,7 +11,7 @@ export default function PortfolioProjectPage({
   params: { project: string }
 }) {
   const { project } = params
-  const title = project === 'splyc' ? 'splyc' : project
+  const title = project === 'splyc' ? 'splyc' : project === 'honeydew' ? 'honeydew' : project
 
   return (
     <main className="min-h-screen px-4 lg:px-6 relative">
@@ -19,9 +21,11 @@ export default function PortfolioProjectPage({
           {title}
         </CustomPixelHeader>
         {project === 'splyc' && <SplycProjectInfo />}
+        {project === 'honeydew' && <HoneydewProjectInfo />}
       </div>
-      {/* Webm: absolutely positioned, doesn't move content */}
+      {/* Floating SVG: absolutely positioned, doesn't move content */}
       {project === 'splyc' && <SplycVideoSection />}
+      {project === 'honeydew' && <HoneydewVideoSection />}
     </main>
   )
 }

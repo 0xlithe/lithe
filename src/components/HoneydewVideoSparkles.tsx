@@ -36,33 +36,25 @@ const ROTATION_AMOUNT = 0.08
 const ROTATION_SPEED = 0.3
 const LOGO_SCALE = 1.5
 
+const LOGO_PATHS = {
+  dark: '/honeydew_light.png',
+  light: '/honeydew_dark.png',
+} as const
+
 function FloatingLogo({ theme }: { theme: 'dark' | 'light' }) {
   const groupRef = useRef<THREE.Group>(null)
   const [texture, setTexture] = useState<THREE.Texture | null>(null)
 
   useEffect(() => {
-    let tex: THREE.Texture | null = null
-    fetch('/Splyc%20Logo%20Transparent.svg')
-      .then((res) => res.text())
-      .then((svgText) => {
-        const parser = new DOMParser()
-        const doc = parser.parseFromString(svgText, 'image/svg+xml')
-        const img = doc.querySelector('image')
-        const href =
-          img?.getAttribute('href') ??
-          img?.getAttribute('xlink:href') ??
-          img?.getAttributeNS('http://www.w3.org/1999/xlink', 'href')
-        if (href?.startsWith('data:image')) {
-          tex = new THREE.TextureLoader().load(href, (t) => {
-            t.minFilter = THREE.NearestFilter
-            t.magFilter = THREE.NearestFilter
-            t.generateMipmaps = false
-            setTexture(t)
-          })
-        }
-      })
-    return () => tex?.dispose()
-  }, [])
+    const loader = new THREE.TextureLoader()
+    const tex = loader.load(LOGO_PATHS[theme], (t) => {
+      t.minFilter = THREE.NearestFilter
+      t.magFilter = THREE.NearestFilter
+      t.generateMipmaps = false
+      setTexture(t)
+    })
+    return () => tex.dispose()
+  }, [theme])
 
   useFrame((state) => {
     if (!groupRef.current) return
@@ -80,7 +72,6 @@ function FloatingLogo({ theme }: { theme: 'dark' | 'light' }) {
         <planeGeometry args={[1, 1]} />
         <meshBasicMaterial
           map={texture}
-          color={THEME_COLORS[theme]}
           transparent
           side={THREE.DoubleSide}
           depthWrite={false}
@@ -145,7 +136,7 @@ function SparklesScene({ theme }: { theme: 'dark' | 'light' }) {
   )
 }
 
-export default function SplycVideoSparkles({
+export default function HoneydewVideoSparkles({
   theme: themeProp,
 }: {
   theme?: 'dark' | 'light'

@@ -23,6 +23,11 @@ const PortfolioFloatingBlock = dynamic(
   { ssr: false }
 )
 
+const PortfolioHoneydewFloatingBlock = dynamic(
+  () => import('./PortfolioHoneydewFloatingBlock'),
+  { ssr: false }
+)
+
 const OrbitControls = dynamic(
   () => import('@react-three/drei').then((mod) => mod.OrbitControls),
   { ssr: false }
@@ -154,12 +159,14 @@ function Scene({
   onExitProgress,
   onEnterProgress,
   onSplycClick,
+  onHoneydewClick,
 }: {
   theme: 'dark' | 'light'
   isExiting: boolean
   onExitProgress?: (progress: number) => void
   onEnterProgress?: (progress: number) => void
   onSplycClick?: () => void
+  onHoneydewClick?: () => void
 }) {
   return (
     <>
@@ -191,6 +198,7 @@ function Scene({
         color={theme === 'dark' ? '#EDEDED' : '#1a1a1a'}
       />
       <PortfolioFloatingBlock theme={theme} onClick={onSplycClick} />
+      <PortfolioHoneydewFloatingBlock theme={theme} onClick={onHoneydewClick} />
     </>
   )
 }
@@ -241,6 +249,7 @@ export default function PortfolioPlayground() {
             onExitProgress={isExiting ? setExitProgress : undefined}
             onEnterProgress={!isExiting ? setEnterProgress : undefined}
             onSplycClick={() => exitAndNavigate('/portfolio/splyc')}
+            onHoneydewClick={() => exitAndNavigate('/portfolio/honeydew')}
           />
         </Suspense>
       </Canvas>

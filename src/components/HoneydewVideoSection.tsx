@@ -3,9 +3,9 @@
 import { useRef } from 'react'
 import { useTheme } from '@/contexts/ThemeContext'
 import { useThemeAtElement } from '@/contexts/ThemeTransitionContext'
-import SplycVideoSparkles from '@/components/SplycVideoSparkles'
+import HoneydewVideoSparkles from '@/components/HoneydewVideoSparkles'
 
-export default function SplycVideoSection() {
+export default function HoneydewVideoSection() {
   const containerRef = useRef<HTMLDivElement>(null)
   const { theme } = useTheme()
   const effectiveTheme = useThemeAtElement(containerRef, theme)
@@ -17,7 +17,7 @@ export default function SplycVideoSection() {
       aria-hidden
     >
       <div className="relative aspect-square w-full overflow-visible">
-        <SplycVideoSparkles theme={effectiveTheme} />
+        <HoneydewVideoSparkles theme={effectiveTheme} />
       </div>
     </aside>
   )
