@@ -16,7 +16,7 @@ type WithAsChild<Base extends object> =
   | (Base & { asChild?: false | undefined });
 
 type SlotProps<T extends HTMLElement = HTMLElement> = {
-  children?: React.ReactElement; // Slot requires single element for asChild
+  children?: React.ReactElement;
 } & DOMMotionProps<T>;
 
 export function mergeRefs<T>(
@@ -62,22 +62,28 @@ function Slot<T extends HTMLElement = HTMLElement>({
   ref,
   ...props
 }: SlotProps<T>) {
+  const isValid = children != null && React.isValidElement(children);
+  const childElement = isValid ? children : null;
+
   const isAlreadyMotion =
-    typeof children.type === 'object' &&
-    children.type !== null &&
-    isMotionComponent(children.type);
+    childElement != null &&
+    typeof childElement.type === 'object' &&
+    childElement.type !== null &&
+    isMotionComponent(childElement.type);
 
   const Base = React.useMemo(
     () =>
-      isAlreadyMotion
-        ? (children.type as React.ElementType)
-        : motion.create(children.type as React.ElementType),
-    [isAlreadyMotion, children.type],
+      childElement && isAlreadyMotion
+        ? (childElement.type as React.ElementType)
+        : childElement
+          ? motion.create(childElement.type as React.ElementType)
+          : () => null,
+    [isAlreadyMotion, childElement],
   );
 
-  if (!React.isValidElement(children)) return null;
+  if (!childElement) return null;
 
-  const { ref: childRef, ...childProps } = children.props as AnyProps;
+  const { ref: childRef, ...childProps } = childElement.props as AnyProps;
 
   const mergedProps = mergeProps(childProps, props);
 

@@ -419,7 +419,7 @@ function AnimateIcon({
       onPointerUp={handlePointerUp}
       {...restProps}
     >
-      {children}
+      {children as React.ReactElement}
     </Slot>
   ) : (
     <motion.span
