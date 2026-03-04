@@ -38,7 +38,7 @@ export default function PortfolioProjectPage({
                 loop
                 muted
                 playsInline
-                className="w-full h-full object-cover object-left scale-125"
+                className="w-full h-full object-contain object-left"
                 style={{ mixBlendMode: 'screen', backgroundColor: 'transparent' }}
               />
             </div>
