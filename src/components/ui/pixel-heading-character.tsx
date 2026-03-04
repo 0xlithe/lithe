@@ -39,7 +39,7 @@ const ROTATING_COLORS = [
 
 const GOLDEN = 0.618033988749895
 
-export type PixelHeadingMode = 'uniform' | 'multi' | 'wave' | 'random'
+type PixelHeadingMode = 'uniform' | 'multi' | 'wave' | 'random'
 export type PrefixFont =
   | 'none'
   | 'square'

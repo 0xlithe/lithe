@@ -6,9 +6,6 @@
 /** Sidebar width in Tailwind units (w-64 = 256px). Used for layout padding and animations. */
 export const SIDEBAR_WIDTH = 256
 
-/** Content area padding to match sidebar. Tailwind: pl-64 = 16rem = 256px */
-export const CONTENT_PADDING_LEFT = SIDEBAR_WIDTH
-
 /** Intro animation: logo wipe duration in ms */
 export const INTRO_DURATION_MS = 2500
 
