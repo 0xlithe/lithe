@@ -5,6 +5,7 @@ import { Suspense, useRef, useEffect, useState } from 'react'
 import { useFrame, useThree } from '@react-three/fiber'
 import * as THREE from 'three'
 import { useTheme } from '@/contexts/ThemeContext'
+import { useThemeAtElement } from '@/contexts/ThemeTransitionContext'
 import { usePageTransition } from '@/contexts/PageTransitionContext'
 
 const Canvas = dynamic(
@@ -14,6 +15,11 @@ const Canvas = dynamic(
 
 const PortfolioPillar = dynamic(
   () => import('./PortfolioPillar'),
+  { ssr: false }
+)
+
+const PortfolioFloatingBlock = dynamic(
+  () => import('./PortfolioFloatingBlock'),
   { ssr: false }
 )
 
@@ -38,8 +44,6 @@ const ORBIT_TARGET: [number, number, number] = [-0.4, -2.5, 0] // Upper half of 
 const EXIT_TARGET: [number, number, number] = [4, 3, 2] // Empty area - camera looks away
 const EXIT_DURATION = 0.7 // Sync with portfolio header exit
 const ENTER_DURATION = 0.6 // seconds
-const MIN_POLAR = 0.72 // Block rotating too high up
-const MAX_POLAR = 1.2   // Allow rotating down more
 const MIN_ZOOM = 3.2
 const MAX_ZOOM = 7
 const EXIT_BLUR_START = 0.55 // Start blur in last 45% of animation
@@ -129,8 +133,6 @@ function AnimatedOrbitControls({
       enableRotate={!isAnimating}
       minDistance={MIN_ZOOM}
       maxDistance={MAX_ZOOM}
-      minPolarAngle={MIN_POLAR}
-      maxPolarAngle={MAX_POLAR}
       autoRotate={!isAnimating}
       autoRotateSpeed={0.25}
     />
@@ -170,6 +172,7 @@ function Scene({
         infiniteGrid
       />
       <PortfolioPillar theme={theme} />
+      <PortfolioFloatingBlock />
       <Sparkles
         count={100}
         scale={12}
@@ -184,6 +187,8 @@ function Scene({
 
 export default function PortfolioPlayground() {
   const { theme } = useTheme()
+  const containerRef = useRef<HTMLDivElement>(null)
+  const effectiveTheme = useThemeAtElement(containerRef, theme)
   const { exitingTo } = usePageTransition()
   const isExiting = !!exitingTo
   const [exitProgress, setExitProgress] = useState(0)
@@ -205,6 +210,7 @@ export default function PortfolioPlayground() {
 
   return (
     <div
+      ref={containerRef}
       className="fixed inset-0 z-0 h-screen w-full flex justify-center"
       style={{
         filter: blurAmount > 0 ? `blur(${blurAmount}px)` : 'none',
@@ -220,7 +226,7 @@ export default function PortfolioPlayground() {
       >
         <Suspense fallback={null}>
           <Scene
-            theme={theme}
+            theme={effectiveTheme}
             isExiting={isExiting}
             onExitProgress={isExiting ? setExitProgress : undefined}
             onEnterProgress={!isExiting ? setEnterProgress : undefined}

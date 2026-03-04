@@ -2,8 +2,8 @@
 
 import * as THREE from 'three'
 
-const PILLAR_WIDTH = 0.35
-const PILLAR_DEPTH = 0.35
+const PILLAR_WIDTH = 0.08
+const PILLAR_DEPTH = 0.08
 const PILLAR_HEIGHT = 12
 
 const THEME_COLORS = {
@@ -16,7 +16,6 @@ const boxGeometry = new THREE.BoxGeometry(
   PILLAR_HEIGHT,
   PILLAR_DEPTH
 )
-const edgesGeometry = new THREE.EdgesGeometry(boxGeometry)
 
 interface PortfolioPillarProps {
   theme?: 'dark' | 'light'
@@ -26,11 +25,8 @@ export default function PortfolioPillar({ theme = 'dark' }: PortfolioPillarProps
   const color = THEME_COLORS[theme]
 
   return (
-    <lineSegments
-      position={[-0.4, -8, 0]}
-      geometry={edgesGeometry}
-    >
-      <lineBasicMaterial color={color} />
-    </lineSegments>
+    <mesh position={[-0.4, -8, 0]} geometry={boxGeometry}>
+      <meshBasicMaterial color={color} />
+    </mesh>
   )
 }
