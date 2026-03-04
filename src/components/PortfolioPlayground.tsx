@@ -1,7 +1,7 @@
 'use client'
 
 import dynamic from 'next/dynamic'
-import { Suspense, useRef, useEffect, useState } from 'react'
+import React, { Suspense, useRef, useEffect, useState } from 'react'
 import { useFrame, useThree } from '@react-three/fiber'
 import * as THREE from 'three'
 import { useTheme } from '@/contexts/ThemeContext'
@@ -38,17 +38,18 @@ const Grid = dynamic(
   { ssr: false }
 )
 
-// Default camera: offset from pillar, looking at upper portion
 const DEFAULT_CAMERA_POSITION: [number, number, number] = [3.5, 0.5, 1.5]
-const ORBIT_TARGET: [number, number, number] = [-0.4, -2.5, 0] // Upper half of pillar
-const EXIT_TARGET: [number, number, number] = [4, 3, 2] // Empty area - camera looks away
-const EXIT_DURATION = 0.7 // Sync with portfolio header exit
-const ENTER_DURATION = 0.6 // seconds
+const ORBIT_TARGET: [number, number, number] = [-0.4, -2.5, 0]
+const EXIT_TARGET: [number, number, number] = [4, 3, 2]
+/** Camera position at start of enter (zoomed out); animates to DEFAULT_CAMERA_POSITION */
+const ENTER_CAMERA_START: [number, number, number] = [6, 2, 4]
+const EXIT_DURATION = 0.7
+const ENTER_DURATION = 0.6
 const MIN_ZOOM = 3.2
 const MAX_ZOOM = 7
-const EXIT_BLUR_START = 0.55 // Start blur in last 45% of animation
-const EXIT_BLUR_MAX = 8 // Max blur in px
-const ENTER_BLUR_MAX = 8 // Max blur at start of intro
+const EXIT_BLUR_START = 0.55
+const EXIT_BLUR_MAX = 8
+const ENTER_BLUR_MAX = 8
 
 function easeOutCubic(t: number) {
   return 1 - Math.pow(1 - t, 3)
@@ -56,17 +57,15 @@ function easeOutCubic(t: number) {
 
 function AnimatedOrbitControls({
   isExiting,
-  theme,
   onExitProgress,
   onEnterProgress,
 }: {
   isExiting: boolean
-  theme: 'dark' | 'light'
   onExitProgress?: (progress: number) => void
   onEnterProgress?: (progress: number) => void
 }) {
   const progressRef = useRef(0)
-  const targetRef = useRef(new THREE.Vector3(...ORBIT_TARGET))
+  const targetRef = useRef(new THREE.Vector3(...EXIT_TARGET))
   const controlsRef = useRef<any>(null)
   const [isEntering, setIsEntering] = useState(true)
   const { camera, invalidate } = useThree()
@@ -79,8 +78,9 @@ function AnimatedOrbitControls({
       setIsEntering(true)
       progressRef.current = 0
       targetRef.current.set(...EXIT_TARGET)
+      camera.position.set(...ENTER_CAMERA_START)
     }
-  }, [isExiting])
+  }, [isExiting, camera])
 
   useFrame((_, delta) => {
     if (isExiting) {
@@ -96,6 +96,7 @@ function AnimatedOrbitControls({
         THREE.MathUtils.lerp(ORBIT_TARGET[1], EXIT_TARGET[1], t),
         THREE.MathUtils.lerp(ORBIT_TARGET[2], EXIT_TARGET[2], t)
       )
+      camera.lookAt(targetRef.current)
     } else if (isEntering) {
       if (progressRef.current >= 1) {
         onEnterProgress?.(1)
@@ -103,10 +104,6 @@ function AnimatedOrbitControls({
         camera.position.set(...DEFAULT_CAMERA_POSITION)
         camera.lookAt(...ORBIT_TARGET)
         camera.updateProjectionMatrix()
-        if (controlsRef.current) {
-          controlsRef.current.target.copy(targetRef.current)
-          controlsRef.current.update()
-        }
         setIsEntering(false)
         return
       }
@@ -118,24 +115,36 @@ function AnimatedOrbitControls({
         THREE.MathUtils.lerp(EXIT_TARGET[1], ORBIT_TARGET[1], t),
         THREE.MathUtils.lerp(EXIT_TARGET[2], ORBIT_TARGET[2], t)
       )
+      camera.position.set(
+        THREE.MathUtils.lerp(ENTER_CAMERA_START[0], DEFAULT_CAMERA_POSITION[0], t),
+        THREE.MathUtils.lerp(ENTER_CAMERA_START[1], DEFAULT_CAMERA_POSITION[1], t),
+        THREE.MathUtils.lerp(ENTER_CAMERA_START[2], DEFAULT_CAMERA_POSITION[2], t)
+      )
+      camera.lookAt(targetRef.current)
     }
     invalidate()
-  })
+  }, -2)
 
   const isAnimating = isExiting || isEntering
+  const showControls = !isEntering && !isExiting
 
   return (
-    <OrbitControls
-      ref={controlsRef}
-      target={targetRef.current}
-      enablePan={false}
-      enableZoom={!isAnimating}
-      enableRotate={!isAnimating}
-      minDistance={MIN_ZOOM}
-      maxDistance={MAX_ZOOM}
-      autoRotate={!isAnimating}
-      autoRotateSpeed={0.25}
-    />
+    showControls && (
+      <OrbitControls
+        key="orbit-ready"
+        ref={controlsRef}
+        target={targetRef.current}
+        enablePan={false}
+        minDistance={MIN_ZOOM}
+        maxDistance={MAX_ZOOM}
+        minAzimuthAngle={-Infinity}
+        maxAzimuthAngle={Infinity}
+        minPolarAngle={0.1}
+        maxPolarAngle={Math.PI - 0.1}
+        autoRotate
+        autoRotateSpeed={0.25}
+      />
+    )
   )
 }
 
@@ -144,17 +153,18 @@ function Scene({
   isExiting,
   onExitProgress,
   onEnterProgress,
+  onSplycClick,
 }: {
   theme: 'dark' | 'light'
   isExiting: boolean
   onExitProgress?: (progress: number) => void
   onEnterProgress?: (progress: number) => void
+  onSplycClick?: () => void
 }) {
   return (
     <>
       <AnimatedOrbitControls
         isExiting={isExiting}
-        theme={theme}
         onExitProgress={onExitProgress}
         onEnterProgress={onEnterProgress}
       />
@@ -172,15 +182,15 @@ function Scene({
         infiniteGrid
       />
       <PortfolioPillar theme={theme} />
-      <PortfolioFloatingBlock />
       <Sparkles
         count={100}
         scale={12}
         size={0.8}
         speed={0.4}
         opacity={0.35}
-        color={theme === 'dark' ? '#EDEDED' : '#a1a1a1'}
+        color={theme === 'dark' ? '#EDEDED' : '#1a1a1a'}
       />
+      <PortfolioFloatingBlock theme={theme} onClick={onSplycClick} />
     </>
   )
 }
@@ -189,7 +199,7 @@ export default function PortfolioPlayground() {
   const { theme } = useTheme()
   const containerRef = useRef<HTMLDivElement>(null)
   const effectiveTheme = useThemeAtElement(containerRef, theme)
-  const { exitingTo } = usePageTransition()
+  const { exitingTo, exitAndNavigate } = usePageTransition()
   const isExiting = !!exitingTo
   const [exitProgress, setExitProgress] = useState(0)
   const [enterProgress, setEnterProgress] = useState(0)
@@ -230,6 +240,7 @@ export default function PortfolioPlayground() {
             isExiting={isExiting}
             onExitProgress={isExiting ? setExitProgress : undefined}
             onEnterProgress={!isExiting ? setEnterProgress : undefined}
+            onSplycClick={() => exitAndNavigate('/portfolio/splyc')}
           />
         </Suspense>
       </Canvas>

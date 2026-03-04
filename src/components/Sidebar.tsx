@@ -139,7 +139,7 @@ export default function Sidebar() {
   const themeTransition = useThemeTransition()
   const { exitAndNavigate } = usePageTransition()
   const pathname = usePathname() ?? '/'
-  const isPortfolio = pathname === '/portfolio'
+  const isPortfolio = pathname === '/portfolio' || pathname.startsWith('/portfolio/')
   const defaultColor = 'var(--lithe-secondary)'
   const hoverColor = 'var(--lithe-primary)'
 
