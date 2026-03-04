@@ -5,8 +5,11 @@ import {
   useContext,
   useState,
   useEffect,
+  useCallback,
   type ReactNode,
 } from 'react'
+import ThemeTransitionOverlay from '@/components/ThemeTransitionOverlay'
+import { ThemeTransitionProvider } from '@/contexts/ThemeTransitionContext'
 
 type Theme = 'dark' | 'light'
 
@@ -14,11 +17,14 @@ const ThemeContext = createContext<{
   theme: Theme
   setTheme: (theme: Theme) => void
   toggleTheme: () => void
+  isTransitioning: boolean
 } | null>(null)
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
   const [theme, setThemeState] = useState<Theme>('dark')
   const [mounted, setMounted] = useState(false)
+  const [overlayActive, setOverlayActive] = useState(false)
+  const [progress, setProgress] = useState(0)
 
   useEffect(() => {
     setMounted(true)
@@ -36,12 +42,41 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
   }, [theme, mounted])
 
   const setTheme = (t: Theme) => setThemeState(t)
-  const toggleTheme = () =>
+
+  const handleOverlayComplete = useCallback(() => {
     setThemeState((prev) => (prev === 'dark' ? 'light' : 'dark'))
+    setOverlayActive(false)
+    setProgress(0)
+  }, [])
+
+  const handleProgressUpdate = useCallback((p: number) => {
+    setProgress(p)
+  }, [])
+
+  const toggleTheme = useCallback(() => {
+    if (overlayActive) return
+    setOverlayActive(true)
+  }, [overlayActive])
+
+  const targetTheme = theme === 'dark' ? 'light' : 'dark'
 
   return (
-    <ThemeContext.Provider value={{ theme, setTheme, toggleTheme }}>
-      {children}
+    <ThemeContext.Provider
+      value={{ theme, setTheme, toggleTheme, isTransitioning: overlayActive }}
+    >
+      <ThemeTransitionProvider
+        progress={progress}
+        targetTheme={overlayActive ? targetTheme : null}
+        isTransitioning={overlayActive}
+      >
+        {children}
+      </ThemeTransitionProvider>
+      <ThemeTransitionOverlay
+        isActive={overlayActive}
+        targetTheme={targetTheme}
+        onProgressUpdate={handleProgressUpdate}
+        onComplete={handleOverlayComplete}
+      />
     </ThemeContext.Provider>
   )
 }

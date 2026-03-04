@@ -10,6 +10,8 @@ import {
 import IntroOutroWrapper from '@/components/IntroOutroWrapper'
 import Sidebar from '@/components/Sidebar'
 import Footer from '@/components/Footer'
+import LogoTeleport from '@/components/LogoTeleport'
+import ThemeTransitionZone from '@/components/ThemeTransitionZone'
 import { ThemeProvider } from '@/contexts/ThemeContext'
 import { PageTransitionProvider } from '@/contexts/PageTransitionContext'
 import { SIDEBAR_WIDTH } from '@/lib/site-config'
@@ -44,16 +46,21 @@ export default function RootLayout({
         <ThemeProvider>
           <PageTransitionProvider>
             <IntroOutroWrapper />
-            <Sidebar />
-            <div
+            <ThemeTransitionZone className="fixed left-0 top-0 z-40 h-screen w-64">
+              <Sidebar />
+            </ThemeTransitionZone>
+            <ThemeTransitionZone
               className="relative z-10 overflow-hidden pb-16 pt-24"
               style={{ paddingLeft: SIDEBAR_WIDTH }}
             >
               {children}
-            </div>
-            <Footer />
+            </ThemeTransitionZone>
+            <ThemeTransitionZone className="fixed bottom-0 left-0 right-0 z-40 py-6 pr-8">
+              <Footer />
+            </ThemeTransitionZone>
+            <LogoTeleport />
           </PageTransitionProvider>
-        </ThemeProvider>
+          </ThemeProvider>
       </body>
     </html>
   )
