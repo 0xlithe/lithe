@@ -23,7 +23,7 @@ export default function PortfolioProjectPage({
       {/* Webm: absolutely positioned, doesn't move content */}
       {project === 'splyc' && (
         <aside
-          className="absolute right-16 lg:right-24 top-[44%] -translate-y-1/2 -translate-x-12 w-96 lg:w-[34rem] overflow-visible"
+          className="absolute right-16 lg:right-24 top-[44%] -translate-y-1/2 translate-x-12 w-[36rem] lg:w-[56rem] overflow-visible"
           aria-hidden
         >
           <div className="relative aspect-square w-full overflow-visible">
