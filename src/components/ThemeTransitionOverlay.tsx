@@ -10,7 +10,7 @@ import {
   useMotionValueEvent,
 } from 'framer-motion'
 
-const DURATION = 1.9
+const DURATION = 2.2
 const THEME_BG = { dark: '#0a0a0a', light: '#FFFFFF' } as const
 
 interface ThemeTransitionOverlayProps {

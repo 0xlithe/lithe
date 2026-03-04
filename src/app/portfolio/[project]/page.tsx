@@ -1,6 +1,6 @@
 import { CustomPixelHeader } from '@/components/CustomPixelHeader'
 import { SplycProjectInfo } from '@/components/SplycProjectInfo'
-import SplycVideoSparkles from '@/components/SplycVideoSparkles'
+import SplycVideoSection from '@/components/SplycVideoSection'
 import { EXIT_OFFSET_PORTFOLIO } from '@/lib/site-config'
 
 export default function PortfolioProjectPage({
@@ -21,30 +21,7 @@ export default function PortfolioProjectPage({
         {project === 'splyc' && <SplycProjectInfo />}
       </div>
       {/* Webm: absolutely positioned, doesn't move content */}
-      {project === 'splyc' && (
-        <aside
-          className="absolute right-16 lg:right-24 top-[44%] -translate-y-1/2 translate-x-12 w-[36rem] lg:w-[56rem] overflow-visible"
-          aria-hidden
-        >
-          <div className="relative aspect-square w-full overflow-visible">
-            <SplycVideoSparkles />
-            <div
-              className="absolute inset-0 rounded-lg overflow-hidden z-10"
-              style={{ background: 'var(--lithe-bg)' }}
-            >
-              <video
-                src="/splyc_rotating_dither.webm?v=2"
-                autoPlay
-                loop
-                muted
-                playsInline
-                className="w-full h-full object-contain object-left"
-                style={{ mixBlendMode: 'screen', backgroundColor: 'transparent' }}
-              />
-            </div>
-          </div>
-        </aside>
-      )}
+      {project === 'splyc' && <SplycVideoSection />}
     </main>
   )
 }
