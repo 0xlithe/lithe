@@ -1,0 +1,286 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Suisse Intl - add .woff2 files to public/fonts/ from https://www.onlinewebfonts.com/fonts/SuisseIntl */
+@font-face {
+  font-family: 'Suisse Intl';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/fonts/SuisseIntl-Regular.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Suisse Intl';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url('/fonts/SuisseIntl-Medium.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Suisse Intl';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url('/fonts/SuisseIntl-SemiBold.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Suisse Intl';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('/fonts/SuisseIntl-Bold.woff2') format('woff2');
+}
+
+@layer base {
+  :root,
+  [data-theme='dark'] {
+    --font-suisse: 'Suisse Intl', system-ui, sans-serif;
+    --lithe-primary: #EDEDED;
+    --lithe-secondary: #A1A1A1;
+    --lithe-muted: #6B6B6B;
+    --lithe-bg: #0A0A0A;
+    --lithe-dark: #0a0a0a;
+    --lithe-surface: #111111;
+    --lithe-card: #161616;
+    --lithe-border: #262626;
+  }
+  [data-theme='light'] {
+    --lithe-primary: #1a1a1a;
+    --lithe-secondary: #525252;
+    --lithe-muted: #6B6B6B;
+    --lithe-bg: #FFFFFF;
+    --lithe-dark: #FFFFFF;
+    --lithe-surface: #FAFAFA;
+    --lithe-card: #F5F5F5;
+    --lithe-border: #E5E5E5;
+  }
+  body {
+    font-family: var(--font-geist-sans), system-ui, sans-serif;
+    background-color: var(--lithe-bg);
+    color: var(--lithe-primary);
+    font-weight: 400;
+    position: relative;
+  }
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    pointer-events: none;
+    opacity: 0.1;
+    mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.95' numOctaves='5' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  }
+  [data-theme='light'] body {
+    color: var(--lithe-primary);
+  }
+  h1 {
+    font-weight: 700; /* titles: bold */
+  }
+  h2, h3, h4, h5, h6 {
+    font-weight: 600; /* headers: semibold */
+  }
+  p {
+    font-weight: 400; /* paragraphs: normal */
+  }
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 0 0% 3.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 3.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 3.9%;
+    --primary: 0 0% 9%;
+    --primary-foreground: 0 0% 98%;
+    --secondary: 0 0% 96.1%;
+    --secondary-foreground: 0 0% 9%;
+    --muted: 0 0% 96.1%;
+    --muted-foreground: 0 0% 45.1%;
+    --accent: 0 0% 96.1%;
+    --accent-foreground: 0 0% 9%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 0 0% 89.8%;
+    --input: 0 0% 89.8%;
+    --ring: 0 0% 3.9%;
+    --chart-1: 12 76% 61%;
+    --chart-2: 173 58% 39%;
+    --chart-3: 197 37% 24%;
+    --chart-4: 43 74% 66%;
+    --chart-5: 27 87% 67%;
+    --radius: 0.5rem;
+  }
+  .dark {
+    --background: 0 0% 3.9%;
+    --foreground: 0 0% 98%;
+    --card: 0 0% 3.9%;
+    --card-foreground: 0 0% 98%;
+    --popover: 0 0% 3.9%;
+    --popover-foreground: 0 0% 98%;
+    --primary: 0 0% 98%;
+    --primary-foreground: 0 0% 9%;
+    --secondary: 0 0% 14.9%;
+    --secondary-foreground: 0 0% 98%;
+    --muted: 0 0% 14.9%;
+    --muted-foreground: 0 0% 63.9%;
+    --accent: 0 0% 14.9%;
+    --accent-foreground: 0 0% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 0 0% 14.9%;
+    --input: 0 0% 14.9%;
+    --ring: 0 0% 83.1%;
+    --chart-1: 220 70% 50%;
+    --chart-2: 160 60% 45%;
+    --chart-3: 30 80% 55%;
+    --chart-4: 280 65% 60%;
+    --chart-5: 340 75% 55%;
+  }
+}
+
+/* No scroll — content fits viewport */
+html,
+body {
+  overflow: hidden;
+  height: 100%;
+}
+html {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE/Edge */
+}
+html::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
+}
+
+/* Logo intro wipe - clip reveals logo left-to-right */
+@keyframes logo-wipe-reveal {
+  from {
+    clip-path: inset(0 100% 0 0);
+  }
+  to {
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+/* Second wipe - black overlay covers logo left-to-right */
+@keyframes logo-wipe-cover {
+  from {
+    clip-path: inset(0 100% 0 0);
+  }
+  to {
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+/* Pixel heading textures — pattern only, no transparent gaps (always visible) */
+[data-texture] {
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  mix-blend-mode: normal;
+  background-blend-mode: normal;
+}
+/* Dark theme: lighter greys */
+[data-texture="vertical-lines"] {
+  background-image: repeating-linear-gradient(
+    90deg,
+    #a3a3a3 0px,
+    #a3a3a3 1px,
+    #737373 1px,
+    #737373 2px
+  );
+  background-size: 3px 3px;
+}
+[data-texture="horizontal-lines"] {
+  background-image: repeating-linear-gradient(
+    0deg,
+    #a3a3a3 0px,
+    #a3a3a3 1px,
+    #737373 1px,
+    #737373 2px
+  );
+  background-size: 3px 3px;
+}
+[data-texture="dots"] {
+  background-image: radial-gradient(
+    circle at center,
+    #a3a3a3 50%,
+    #737373 50%
+  );
+  background-size: 1.5px 1.5px;
+}
+[data-texture="grid"] {
+  background-image: repeating-linear-gradient(
+      -45deg,
+      #a3a3a3 0px,
+      #a3a3a3 1px,
+      #737373 1px,
+      #737373 3px
+    ),
+    repeating-linear-gradient(
+      45deg,
+      #a3a3a3 0px,
+      #a3a3a3 1px,
+      #737373 1px,
+      #737373 3px
+    );
+  background-size: 4px 4px;
+}
+[data-texture="halftone"] {
+  background-image: radial-gradient(
+    circle at center,
+    #a3a3a3 50%,
+    #737373 50%
+  );
+  background-size: 2px 2px;
+}
+/* Light theme: darker greys */
+[data-theme='light'] [data-texture="vertical-lines"] {
+  background-image: repeating-linear-gradient(
+    90deg,
+    #737373 0px,
+    #737373 1px,
+    #404040 1px,
+    #404040 2px
+  );
+}
+[data-theme='light'] [data-texture="horizontal-lines"] {
+  background-image: repeating-linear-gradient(
+    0deg,
+    #737373 0px,
+    #737373 1px,
+    #404040 1px,
+    #404040 2px
+  );
+}
+[data-theme='light'] [data-texture="dots"] {
+  background-image: radial-gradient(
+    circle at center,
+    #737373 50%,
+    #404040 50%
+  );
+}
+[data-theme='light'] [data-texture="grid"] {
+  background-image: repeating-linear-gradient(
+      -45deg,
+      #737373 0px,
+      #737373 1px,
+      #404040 1px,
+      #404040 3px
+    ),
+    repeating-linear-gradient(
+      45deg,
+      #737373 0px,
+      #737373 1px,
+      #404040 1px,
+      #404040 3px
+    );
+}
+[data-theme='light'] [data-texture="halftone"] {
+  background-image: radial-gradient(
+    circle at center,
+    #737373 50%,
+    #404040 50%
+  );
+}
