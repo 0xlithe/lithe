@@ -17,9 +17,16 @@ interface CustomPixelHeaderProps {
   className?: string
   /** Exit animation offset (px). Default from config. Portfolio uses larger for wider text. */
   exitOffset?: number
+  /** Exit animation duration (s). Portfolio uses longer to sync with playground outro. */
+  exitDuration?: number
 }
 
-export function CustomPixelHeader({ children, className, exitOffset = EXIT_OFFSET_DEFAULT }: CustomPixelHeaderProps) {
+export function CustomPixelHeader({
+  children,
+  className,
+  exitOffset = EXIT_OFFSET_DEFAULT,
+  exitDuration = 0.35,
+}: CustomPixelHeaderProps) {
   const { exitingTo, notifyExitComplete } = usePageTransition()
   const isExiting = !!exitingTo
   const exitX = -Math.abs(exitOffset)
@@ -31,7 +38,7 @@ export function CustomPixelHeader({ children, className, exitOffset = EXIT_OFFSE
       animate={isExiting ? { x: exitX } : { x: 0 }}
       transition={
         isExiting
-          ? { x: { duration: 0.35, ease: [0.4, 0, 0.2, 1] } }
+          ? { x: { duration: exitDuration, ease: [0.4, 0, 0.2, 1] } }
           : ENTER_TRANSITION
       }
       onAnimationComplete={isExiting ? notifyExitComplete : undefined}

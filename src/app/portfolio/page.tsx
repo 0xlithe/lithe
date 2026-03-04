@@ -7,7 +7,9 @@ export default function Portfolio() {
     <main className="min-h-screen px-4 lg:px-6 relative">
       <PortfolioPlayground />
       <div className="relative z-10 mr-auto max-w-7xl">
-        <CustomPixelHeader exitOffset={EXIT_OFFSET_PORTFOLIO}>portfolio</CustomPixelHeader>
+        <CustomPixelHeader exitOffset={EXIT_OFFSET_PORTFOLIO} exitDuration={0.7}>
+          portfolio
+        </CustomPixelHeader>
       </div>
     </main>
   )
