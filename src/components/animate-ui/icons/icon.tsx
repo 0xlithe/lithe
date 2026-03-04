@@ -13,7 +13,11 @@ import {
 
 import { cn } from '@/lib/utils';
 import { useIsInView } from '@/hooks/use-is-in-view';
-import { Slot, type WithAsChild } from '@/components/animate-ui/primitives/animate/slot';
+import {
+  Slot,
+  mergeRefs,
+  type WithAsChild,
+} from '@/components/animate-ui/primitives/animate/slot';
 
 const staticAnimations = {
   path: {
@@ -402,25 +406,30 @@ function AnimateIcon({
     },
   );
 
+  const { ref: propsRef, ...restProps } = props as AnyProps & {
+    ref?: React.Ref<HTMLElement>;
+  };
+  const mergedRef = mergeRefs<HTMLElement>(inViewRef, propsRef);
+
   const content = asChild ? (
     <Slot
-      ref={inViewRef as React.Ref<HTMLElement>}
+      ref={mergedRef}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
       onPointerDown={handlePointerDown}
       onPointerUp={handlePointerUp}
-      {...props}
+      {...restProps}
     >
       {children}
     </Slot>
   ) : (
     <motion.span
-      ref={inViewRef as React.Ref<HTMLSpanElement>}
+      ref={mergedRef}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
       onPointerDown={handlePointerDown}
       onPointerUp={handlePointerUp}
-      {...props}
+      {...restProps}
     >
       {children}
     </motion.span>
