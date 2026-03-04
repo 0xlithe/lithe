@@ -139,6 +139,7 @@ export default function Sidebar() {
   const themeTransition = useThemeTransition()
   const { exitAndNavigate } = usePageTransition()
   const pathname = usePathname() ?? '/'
+  const isPortfolio = pathname === '/portfolio'
   const defaultColor = 'var(--lithe-secondary)'
   const hoverColor = 'var(--lithe-primary)'
 
@@ -147,9 +148,10 @@ export default function Sidebar() {
       <aside
         className="fixed left-0 top-0 z-40 flex h-screen w-64 flex-col py-8 pl-8"
         style={{
-          backgroundColor: themeTransition?.isTransitioning
-            ? 'transparent'
-            : 'var(--lithe-bg)',
+          backgroundColor:
+            themeTransition?.isTransitioning || isPortfolio
+              ? 'transparent'
+              : 'var(--lithe-bg)',
         }}
     >
       <motion.button

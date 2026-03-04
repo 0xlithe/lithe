@@ -1,10 +1,12 @@
 import { CustomPixelHeader } from '@/components/CustomPixelHeader'
+import PortfolioPlayground from '@/components/PortfolioPlayground'
 import { EXIT_OFFSET_PORTFOLIO } from '@/lib/site-config'
 
 export default function Portfolio() {
   return (
-    <main className="min-h-screen px-4 lg:px-6">
-      <div className="mr-auto max-w-7xl">
+    <main className="min-h-screen px-4 lg:px-6 relative">
+      <PortfolioPlayground />
+      <div className="relative z-10 mr-auto max-w-7xl">
         <CustomPixelHeader exitOffset={EXIT_OFFSET_PORTFOLIO}>portfolio</CustomPixelHeader>
       </div>
     </main>
