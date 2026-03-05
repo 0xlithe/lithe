@@ -5,12 +5,12 @@ import SplycVideoSection from '@/components/SplycVideoSection'
 import HoneydewVideoSection from '@/components/HoneydewVideoSection'
 import { EXIT_OFFSET_PORTFOLIO } from '@/lib/site-config'
 
-export default function PortfolioProjectPage({
+export default async function PortfolioProjectPage({
   params,
 }: {
-  params: { project: string }
+  params: Promise<{ project: string }>
 }) {
-  const { project } = params
+  const { project } = await params
   const title = project === 'splyc' ? 'splyc' : project === 'honeydew' ? 'honeydew' : project
 
   return (
