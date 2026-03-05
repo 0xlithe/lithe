@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import { Analytics } from '@vercel/analytics/next'
 import { GeistSans } from 'geist/font/sans'
 import {
   GeistPixelSquare,
@@ -61,6 +62,7 @@ export default function RootLayout({
             <LogoTeleport />
           </PageTransitionProvider>
           </ThemeProvider>
+        <Analytics />
       </body>
     </html>
   )
