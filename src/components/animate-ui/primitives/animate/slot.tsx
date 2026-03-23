@@ -87,9 +87,10 @@ function Slot<T extends HTMLElement = HTMLElement>({
 
   const mergedProps = mergeProps(childProps, props);
 
-  return (
-    <Base {...mergedProps} ref={mergeRefs(childRef as React.Ref<T>, ref)} />
-  );
+  const mergedRef = mergeRefs(childRef as React.Ref<T>, ref);
+
+  // @ts-expect-error motion.create/Slot ref: motion+react type mismatch (ref reported as 'never')
+  return <Base {...mergedProps} ref={mergedRef} />;
 }
 
 export {

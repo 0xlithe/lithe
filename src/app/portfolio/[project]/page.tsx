@@ -1,8 +1,10 @@
 import { CustomPixelHeader } from '@/components/CustomPixelHeader'
 import { SplycProjectInfo } from '@/components/SplycProjectInfo'
 import { HoneydewProjectInfo } from '@/components/HoneydewProjectInfo'
+import { QuiltProjectInfo } from '@/components/QuiltProjectInfo'
 import SplycVideoSection from '@/components/SplycVideoSection'
 import HoneydewVideoSection from '@/components/HoneydewVideoSection'
+import QuiltVideoSection from '@/components/QuiltVideoSection'
 import { EXIT_OFFSET_PORTFOLIO } from '@/lib/site-config'
 
 export default async function PortfolioProjectPage({
@@ -11,7 +13,7 @@ export default async function PortfolioProjectPage({
   params: Promise<{ project: string }>
 }) {
   const { project } = await params
-  const title = project === 'splyc' ? 'splyc' : project === 'honeydew' ? 'honeydew' : project
+  const title = project === 'splyc' ? 'splyc' : project === 'honeydew' ? 'honeydew' : project === 'quilt' ? 'quilt' : project
 
   return (
     <main className="min-h-screen px-4 lg:px-6 relative">
@@ -22,10 +24,12 @@ export default async function PortfolioProjectPage({
         </CustomPixelHeader>
         {project === 'splyc' && <SplycProjectInfo />}
         {project === 'honeydew' && <HoneydewProjectInfo />}
+        {project === 'quilt' && <QuiltProjectInfo />}
       </div>
       {/* Floating SVG: absolutely positioned, doesn't move content */}
       {project === 'splyc' && <SplycVideoSection />}
       {project === 'honeydew' && <HoneydewVideoSection />}
+      {project === 'quilt' && <QuiltVideoSection />}
     </main>
   )
 }
