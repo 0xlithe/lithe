@@ -45,6 +45,6 @@ export const CONTACT = {
   },
   x: {
     label: 'x:',
-    url: 'https://x.com/lithe_l',
+    url: 'https://x.com/lithe_',
   },
 } as const
