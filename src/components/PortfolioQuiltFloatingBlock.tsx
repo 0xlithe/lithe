@@ -30,7 +30,7 @@ interface PortfolioQuiltFloatingBlockProps {
   onClick?: () => void
 }
 
-/** Quilt logo on a plane, right side lower (opposite Splyc/Honeydew layout) */
+/** Quilt logo on a plane, right side lower (opposite Splyc layout) */
 export default function PortfolioQuiltFloatingBlock({
   theme = 'dark',
   onClick,

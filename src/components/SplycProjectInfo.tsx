@@ -13,6 +13,10 @@ import {
 } from '@/lib/site-config'
 import { TechStackLogos } from '@/components/TechStackLogos'
 import { InteractiveHoverButton } from '@/components/ui/interactive-hover-button'
+import { siBrave, siGooglechrome } from 'simple-icons'
+
+const STORE_ICONS = [siBrave, siGooglechrome] as const
+const ICON_SIZE = 20
 
 const SPLYC_ITEMS: Array<
   | { label: string; value: string }
@@ -25,8 +29,7 @@ const SPLYC_ITEMS: Array<
   {
     label: '',
     lines: [
-      'Splyc is an AI enhanced clipping tool for capturing, organizing & distributing content.',
-      "It is a two-part Saas clip manager, paired with the Splyc+ extension for live AI clipping.",
+      'Splyc combines livestream monitoring, automated and manual clipping, AI-assisted content generation, video editing, cross-platform publishing, and analytics into a single workflow. Its browser extension, Splyc+, also enables users to capture moments directly from supported livestream platforms.',
     ],
   },
 ]
@@ -62,7 +65,7 @@ export function SplycProjectInfo() {
 
   return (
     <motion.div
-      className="space-y-3 font-sans text-sm"
+      className="max-w-2xl space-y-3 pr-4 font-sans text-sm"
       style={{
         marginTop: `calc(50vh - ${CONTACT_PARAGRAPH_OFFSET_PX}px)`,
         color: 'var(--lithe-secondary)',
@@ -125,20 +128,19 @@ export function SplycProjectInfo() {
               </span>
             )
           ) : (
-            <span className="text-[var(--lithe-primary)] block space-y-1">
+            <span className="block break-words text-[var(--lithe-primary)] leading-relaxed">
               {item.lines.map((line, j) => (
-                <span key={j} className="block">
-                  <DecryptedText
-                    text={line}
-                    animateOn="view"
-                    sequential
-                    useOriginalCharsOnly
-                    parentClassName="inline"
-                    encrypting={isExiting}
-                    encryptSpeed={CONTACT_ENCRYPT_SPEED}
-                    onEncryptComplete={handleEncryptComplete}
-                  />
-                </span>
+                <DecryptedText
+                  key={j}
+                  text={line}
+                  animateOn="view"
+                  sequential
+                  useOriginalCharsOnly
+                  parentClassName="!block w-full whitespace-pre-wrap"
+                  encrypting={isExiting}
+                  encryptSpeed={CONTACT_ENCRYPT_SPEED}
+                  onEncryptComplete={handleEncryptComplete}
+                />
               ))}
             </span>
           )}
@@ -147,13 +149,36 @@ export function SplycProjectInfo() {
       <div className="flex flex-wrap items-center gap-4">
         <Link
           href="/portfolio"
-          className="inline-flex items-center gap-2 text-[var(--lithe-secondary)] hover:text-[var(--lithe-primary)] transition-colors"
+          className="inline-flex items-center leading-none text-[var(--lithe-secondary)] hover:text-[var(--lithe-primary)] transition-colors"
         >
           <AnimateIcon animateOnHover animation="out">
             <ArrowLeft size={18} />
           </AnimateIcon>
         </Link>
-        <InteractiveHoverButton href="https://splyc.app">View project</InteractiveHoverButton>
+        <InteractiveHoverButton href="https://splyc.app">Sign up now</InteractiveHoverButton>
+        <InteractiveHoverButton href="https://chromewebstore.google.com/detail/splyc+/bhaeebdghgikgpnibfgblddjiojlbecc?hl=en-US">
+          <span className="inline-flex items-center gap-2">
+            {STORE_ICONS.map((icon) => {
+              const svgWithColor = icon.svg.replace(/<path\s+/, `<path fill="currentColor" `)
+              return (
+                <span
+                  key={icon.slug}
+                  className="inline-flex shrink-0 items-center justify-center"
+                  title={icon.title}
+                  aria-label={icon.title}
+                  style={{ width: ICON_SIZE, height: ICON_SIZE }}
+                  dangerouslySetInnerHTML={{
+                    __html: svgWithColor.replace(
+                      /<svg([^>]*)>/,
+                      `<svg$1 width="${ICON_SIZE}" height="${ICON_SIZE}" class="inline-block">`
+                    ),
+                  }}
+                />
+              )
+            })}
+            <span>Download Extension</span>
+          </span>
+        </InteractiveHoverButton>
       </div>
     </motion.div>
   )

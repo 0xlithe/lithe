@@ -11,14 +11,12 @@ export default function SplycSvg({ theme }: { theme: 'dark' | 'light' }) {
       }}
     >
       <img
-        src="/Splyc%20Logo%20Transparent.svg"
+        src="/splyc-logo.png"
         alt=""
         className="w-full h-full object-contain object-center min-w-0"
         style={{
-          filter: theme === 'light'
-            ? 'invert(1) contrast(1.15)'
-            : 'contrast(1.15)',
-          imageRendering: '-webkit-optimize-contrast',
+          filter: theme === 'light' ? 'brightness(0)' : 'brightness(0) invert(1)',
+          imageRendering: 'auto',
           transition: 'filter 0.5s ease',
         }}
       />

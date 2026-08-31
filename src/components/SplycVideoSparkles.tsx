@@ -36,32 +36,38 @@ const ROTATION_AMOUNT = 0.08
 const ROTATION_SPEED = 0.3
 const LOGO_SCALE = 1.5
 
+function flattenLogoToWhite(texture: THREE.Texture) {
+  const img = texture.image as CanvasImageSource & { width: number; height: number }
+  const canvas = document.createElement('canvas')
+  canvas.width = img.width
+  canvas.height = img.height
+  const ctx = canvas.getContext('2d')
+  if (!ctx) return
+  ctx.drawImage(img, 0, 0)
+  const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height)
+  const pixels = imageData.data
+  for (let i = 0; i < pixels.length; i += 4) {
+    pixels[i] = 255
+    pixels[i + 1] = 255
+    pixels[i + 2] = 255
+  }
+  ctx.putImageData(imageData, 0, 0)
+  texture.image = canvas
+  texture.needsUpdate = true
+}
+
 function FloatingLogo({ theme }: { theme: 'dark' | 'light' }) {
   const groupRef = useRef<THREE.Group>(null)
   const [texture, setTexture] = useState<THREE.Texture | null>(null)
 
   useEffect(() => {
-    let tex: THREE.Texture | null = null
-    fetch('/Splyc%20Logo%20Transparent.svg')
-      .then((res) => res.text())
-      .then((svgText) => {
-        const parser = new DOMParser()
-        const doc = parser.parseFromString(svgText, 'image/svg+xml')
-        const img = doc.querySelector('image')
-        const href =
-          img?.getAttribute('href') ??
-          img?.getAttribute('xlink:href') ??
-          img?.getAttributeNS('http://www.w3.org/1999/xlink', 'href')
-        if (href?.startsWith('data:image')) {
-          tex = new THREE.TextureLoader().load(href, (t) => {
-            t.minFilter = THREE.NearestFilter
-            t.magFilter = THREE.NearestFilter
-            t.generateMipmaps = false
-            setTexture(t)
-          })
-        }
-      })
-    return () => tex?.dispose()
+    const loader = new THREE.TextureLoader()
+    const tex = loader.load('/splyc-logo.png', (t) => {
+      flattenLogoToWhite(t)
+      t.colorSpace = THREE.SRGBColorSpace
+      setTexture(t)
+    })
+    return () => tex.dispose()
   }, [])
 
   useFrame((state) => {

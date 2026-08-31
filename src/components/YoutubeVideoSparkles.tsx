@@ -36,25 +36,40 @@ const ROTATION_AMOUNT = 0.08
 const ROTATION_SPEED = 0.3
 const LOGO_SCALE = 1.5
 
-const LOGO_PATHS = {
-  dark: '/honeydew_light.png',
-  light: '/honeydew_dark.png',
-} as const
+const LOGO_PATH = '/youtube.png'
 
 function FloatingLogo({ theme }: { theme: 'dark' | 'light' }) {
   const groupRef = useRef<THREE.Group>(null)
   const [texture, setTexture] = useState<THREE.Texture | null>(null)
 
   useEffect(() => {
-    const loader = new THREE.TextureLoader()
-    const tex = loader.load(LOGO_PATHS[theme], (t) => {
-      t.minFilter = THREE.NearestFilter
-      t.magFilter = THREE.NearestFilter
-      t.generateMipmaps = false
-      setTexture(t)
-    })
-    return () => tex.dispose()
-  }, [theme])
+    let disposed = false
+    let tex: THREE.Texture | null = null
+    const img = new Image()
+    img.onload = () => {
+      if (disposed) return
+      const size = 512
+      const canvas = document.createElement('canvas')
+      canvas.width = size
+      canvas.height = size
+      const ctx = canvas.getContext('2d')
+      if (!ctx) return
+      const iconSize = size * 0.82
+      ctx.drawImage(img, (size - iconSize) / 2, (size - iconSize) / 2, iconSize, iconSize)
+      tex = new THREE.CanvasTexture(canvas)
+      tex.colorSpace = THREE.SRGBColorSpace
+      tex.minFilter = THREE.LinearFilter
+      tex.magFilter = THREE.LinearFilter
+      tex.needsUpdate = true
+      setTexture(tex)
+    }
+    img.onerror = () => setTexture(null)
+    img.src = LOGO_PATH
+    return () => {
+      disposed = true
+      tex?.dispose()
+    }
+  }, [])
 
   useFrame((state) => {
     if (!groupRef.current) return
@@ -72,6 +87,7 @@ function FloatingLogo({ theme }: { theme: 'dark' | 'light' }) {
         <planeGeometry args={[1, 1]} />
         <meshBasicMaterial
           map={texture}
+          color={THEME_COLORS[theme]}
           transparent
           side={THREE.DoubleSide}
           depthWrite={false}
@@ -136,7 +152,7 @@ function SparklesScene({ theme }: { theme: 'dark' | 'light' }) {
   )
 }
 
-export default function HoneydewVideoSparkles({
+export default function YoutubeVideoSparkles({
   theme: themeProp,
 }: {
   theme?: 'dark' | 'light'

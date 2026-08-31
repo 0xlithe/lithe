@@ -12,6 +12,7 @@ import {
   CONTACT_PARAGRAPH_OFFSET_PX,
 } from '@/lib/site-config'
 import { InteractiveHoverButton } from '@/components/ui/interactive-hover-button'
+import { QuiltTechStackLogos } from '@/components/TechStackLogos'
 import { siBrave, siGooglechrome } from 'simple-icons'
 
 const STORE_ICONS = [siBrave, siGooglechrome] as const
@@ -23,13 +24,13 @@ const QUILT_ITEMS: Array<
 > = [
   {
     label: 'built',
-    value: '2026 [wip]',
+    value: 'jan. 2026',
   },
   {
     label: '',
     lines: [
-      'Quilt is a focused automation workspace for X. It brings repetitive engagement workflows — following,',
-      'unfollowing, liking, and unliking — into a controlled, task-based interface with safety built in.',
+      'quilt is a focused automation workspace for X. it features automatic following, unfollowing, like, and unliking capabilities.',
+      'advanced search by users, data, category & more. on top of a task-based interface with human realistic timing, and a clean side panel.',
     ],
   },
 ]
@@ -111,6 +112,7 @@ export function QuiltProjectInfo() {
                     onEncryptComplete={handleEncryptComplete}
                   />
                 </span>
+                <QuiltTechStackLogos />
               </>
             ) : (
               <span className="text-[var(--lithe-primary)]">
@@ -146,18 +148,18 @@ export function QuiltProjectInfo() {
           )}
         </p>
       ))}
-      <div className="flex flex-wrap items-start gap-4">
+      <div className="flex flex-wrap items-center gap-4">
         <Link
           href="/portfolio"
-          className="inline-flex items-center gap-2 text-[var(--lithe-secondary)] hover:text-[var(--lithe-primary)] transition-colors"
+          className="inline-flex items-center leading-none text-[var(--lithe-secondary)] hover:text-[var(--lithe-primary)] transition-colors"
         >
           <AnimateIcon animateOnHover animation="out">
             <ArrowLeft size={18} />
           </AnimateIcon>
         </Link>
         <InteractiveHoverButton href="https://github.com/0xlithe/quilt">View project</InteractiveHoverButton>
-        <div className="flex flex-col items-center">
-          <InteractiveHoverButton href="/portfolio/quilt">
+        <div className="flex items-center gap-4">
+          <InteractiveHoverButton href="https://chromewebstore.google.com/detail/quilt-%E2%80%94-for-x/moodipobieljlnnchclbohbgfepfbihh?authuser=0&hl=en">
             <span className="inline-flex items-center gap-2">
               {STORE_ICONS.map((icon) => {
                 const svgWithColor = icon.svg.replace(/<path\s+/, `<path fill="currentColor" `)
@@ -182,7 +184,7 @@ export function QuiltProjectInfo() {
           </InteractiveHoverButton>
           <Link
             href="/portfolio/quilt/privacy"
-            className="mt-6 text-xs text-[var(--lithe-muted)] transition-colors hover:text-[var(--lithe-primary)]"
+            className="text-xs text-[var(--lithe-muted)] transition-colors hover:text-[var(--lithe-primary)]"
           >
             PRIVACY POLICY
           </Link>

@@ -7,8 +7,7 @@ import {
   siTypescript,
   siPrisma,
   siTailwindcss,
-  siDotnet,
-  siAvaloniaui,
+  siGooglechrome,
 } from 'simple-icons'
 
 const SPLYC_TECH_STACK = [
@@ -19,7 +18,11 @@ const SPLYC_TECH_STACK = [
   siTailwindcss,
 ] as const
 
-const HONEYDEW_TECH_STACK = [siDotnet, siAvaloniaui] as const
+const QUILT_TECH_STACK = [
+  { ...siGooglechrome, title: 'Chromium' },
+  siTypescript,
+  siTailwindcss,
+] as const
 
 const ICON_SIZE = 20
 
@@ -67,6 +70,6 @@ export function TechStackLogos() {
   return <TechStackIcons icons={SPLYC_TECH_STACK} />
 }
 
-export function HoneydewTechStackLogos() {
-  return <TechStackIcons icons={HONEYDEW_TECH_STACK} />
+export function QuiltTechStackLogos() {
+  return <TechStackIcons icons={QUILT_TECH_STACK} />
 }

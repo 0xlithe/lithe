@@ -17,6 +17,8 @@ export function PageTransitionProvider({ children }: { children: React.ReactNode
   const router = useRouter()
   const [exitingTo, setExitingTo] = useState<string | null>(null)
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const exitingToRef = useRef<string | null>(null)
+  exitingToRef.current = exitingTo
 
   const doNavigate = useCallback(
     (href: string | null) => {
@@ -46,11 +48,11 @@ export function PageTransitionProvider({ children }: { children: React.ReactNode
       clearTimeout(timeoutRef.current)
       timeoutRef.current = null
     }
-    setExitingTo((href) => {
-      if (href) router.push(href)
-      return null
-    })
-  }, [router])
+    const href = exitingToRef.current
+    if (!href) return
+    exitingToRef.current = null
+    queueMicrotask(() => doNavigate(href))
+  }, [doNavigate])
 
   return (
     <PageTransitionContext.Provider

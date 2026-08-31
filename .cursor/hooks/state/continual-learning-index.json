@@ -1,9 +1,13 @@
 {
   "version": 1,
   "transcripts": {
-    "C:\\Users\\brack\\.cursor\\projects\\c-Users-brack-Desktop-Stuff-Projects-LITHE-LITHE\\agent-transcripts\\47b578c5-f2af-454b-90f9-7b17fb644a97\\47b578c5-f2af-454b-90f9-7b17fb644a97.jsonl": {
-      "mtimeMs": 1774230658043,
-      "lastProcessedAt": "2026-03-02T00:00:00.000Z"
+    "C:\\Users\\brack\\.cursor\\projects\\c-Users-brack-Desktop-Stuff-Projects-LITHE\\agent-transcripts\\7e5826c4-a7ce-4612-a259-029697bc88cf\\7e5826c4-a7ce-4612-a259-029697bc88cf.jsonl": {
+      "mtimeMs": 1788165093522,
+      "lastProcessedAt": "2026-08-31T08:32:00.000Z"
+    },
+    "C:\\Users\\brack\\.cursor\\projects\\c-Users-brack-Desktop-Stuff-Projects-LITHE\\agent-transcripts\\7e5826c4-a7ce-4612-a259-029697bc88cf\\subagents\\a2ec5ca5-d3d1-46f0-932f-eb220e7a36d4.jsonl": {
+      "mtimeMs": 1788165114875,
+      "lastProcessedAt": "2026-08-31T08:32:00.000Z"
     }
   }
 }

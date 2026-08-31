@@ -23,13 +23,13 @@ const PortfolioFloatingBlock = dynamic(
   { ssr: false }
 )
 
-const PortfolioHoneydewFloatingBlock = dynamic(
-  () => import('./PortfolioHoneydewFloatingBlock'),
+const PortfolioQuiltFloatingBlock = dynamic(
+  () => import('./PortfolioQuiltFloatingBlock'),
   { ssr: false }
 )
 
-const PortfolioQuiltFloatingBlock = dynamic(
-  () => import('./PortfolioQuiltFloatingBlock'),
+const PortfolioYoutubeFloatingBlock = dynamic(
+  () => import('./PortfolioYoutubeFloatingBlock'),
   { ssr: false }
 )
 
@@ -164,16 +164,16 @@ function Scene({
   onExitProgress,
   onEnterProgress,
   onSplycClick,
-  onHoneydewClick,
   onQuiltClick,
+  onYoutubeClick,
 }: {
   theme: 'dark' | 'light'
   isExiting: boolean
   onExitProgress?: (progress: number) => void
   onEnterProgress?: (progress: number) => void
   onSplycClick?: () => void
-  onHoneydewClick?: () => void
   onQuiltClick?: () => void
+  onYoutubeClick?: () => void
 }) {
   return (
     <>
@@ -205,8 +205,8 @@ function Scene({
         color={theme === 'dark' ? '#EDEDED' : '#1a1a1a'}
       />
       <PortfolioFloatingBlock theme={theme} onClick={onSplycClick} />
-      <PortfolioHoneydewFloatingBlock theme={theme} onClick={onHoneydewClick} />
       <PortfolioQuiltFloatingBlock theme={theme} onClick={onQuiltClick} />
+      <PortfolioYoutubeFloatingBlock theme={theme} onClick={onYoutubeClick} />
     </>
   )
 }
@@ -257,8 +257,8 @@ export default function PortfolioPlayground() {
             onExitProgress={isExiting ? setExitProgress : undefined}
             onEnterProgress={!isExiting ? setEnterProgress : undefined}
             onSplycClick={() => exitAndNavigate('/portfolio/splyc')}
-            onHoneydewClick={() => exitAndNavigate('/portfolio/honeydew')}
             onQuiltClick={() => exitAndNavigate('/quilt')}
+            onYoutubeClick={() => exitAndNavigate('/youtube')}
           />
         </Suspense>
       </Canvas>

@@ -10,37 +10,34 @@ const Sparkles = dynamic(
   { ssr: false }
 )
 
-const LOGO_PATHS = {
-  dark: '/honeydew_light.png',
-  light: '/honeydew_dark.png',
-} as const
+const LOGO_PATH = '/youtube.png'
 
-const ORBIT_CENTER: [number, number, number] = [0.4, -3.5, 0]
-const ORBIT_RADIUS = 0.64
-const ORBIT_SPEED = 0.022
+const ORBIT_CENTER: [number, number, number] = [-0.15, -3.25, -0.25]
+const ORBIT_RADIUS = 0.38
+const ORBIT_SPEED = 0.02
 const SCALE = 0.5
-const FLOAT_AMPLITUDE = 0.08
-const FLOAT_SPEED = 0.28
-const ROTATE_SPEED = -0.04
+const FLOAT_AMPLITUDE = 0.065
+const FLOAT_SPEED = 0.3
+const ROTATE_SPEED = 0.035
 
 const THEME_COLORS = {
   dark: '#EDEDED',
   light: '#1a1a1a',
 } as const
 
-interface PortfolioHoneydewFloatingBlockProps {
+interface PortfolioYoutubeFloatingBlockProps {
   theme?: 'dark' | 'light'
   onClick?: () => void
 }
 
-/** Honeydew logo on a plane, further down the pillar on the opposite side from Splyc */
-export default function PortfolioHoneydewFloatingBlock({
+/** YouTube logo on a plane, slightly below Quilt and rotated CW */
+export default function PortfolioYoutubeFloatingBlock({
   theme = 'dark',
   onClick,
-}: PortfolioHoneydewFloatingBlockProps) {
+}: PortfolioYoutubeFloatingBlockProps) {
   const [texture, setTexture] = useState<THREE.Texture | null>(null)
   const groupRef = useRef<THREE.Group>(null)
-  const angleRef = useRef(Math.atan2(0.5, 0.4))
+  const angleRef = useRef(Math.atan2(0.5, 0.15) - 0.45)
   const timeRef = useRef(0)
 
   useFrame((_, delta) => {
@@ -55,15 +52,34 @@ export default function PortfolioHoneydewFloatingBlock({
   })
 
   useEffect(() => {
-    const loader = new THREE.TextureLoader()
-    const tex = loader.load(LOGO_PATHS[theme], (t) => {
-      t.minFilter = THREE.NearestFilter
-      t.magFilter = THREE.NearestFilter
-      t.generateMipmaps = false
-      setTexture(t)
-    })
-    return () => tex.dispose()
-  }, [theme])
+    let disposed = false
+    let tex: THREE.Texture | null = null
+    const img = new Image()
+    img.onload = () => {
+      if (disposed) return
+      const size = 512
+      const canvas = document.createElement('canvas')
+      canvas.width = size
+      canvas.height = size
+      const ctx = canvas.getContext('2d')
+      if (!ctx) return
+      const iconSize = size * 0.82
+      ctx.drawImage(img, (size - iconSize) / 2, (size - iconSize) / 2, iconSize, iconSize)
+      tex = new THREE.CanvasTexture(canvas)
+      tex.colorSpace = THREE.SRGBColorSpace
+      tex.minFilter = THREE.LinearFilter
+      tex.magFilter = THREE.LinearFilter
+      tex.needsUpdate = true
+      setTexture(tex)
+    }
+    img.onerror = () => setTexture(null)
+    img.src = LOGO_PATH
+    return () => {
+      disposed = true
+      tex?.dispose()
+      document.body.style.cursor = 'auto'
+    }
+  }, [])
 
   if (!texture) return null
 
@@ -84,6 +100,7 @@ export default function PortfolioHoneydewFloatingBlock({
         speed={0.3}
         opacity={0.6}
         color={THEME_COLORS[theme]}
+        raycast={() => null}
       />
       <mesh
         onPointerDown={(e) => e.stopPropagation()}
@@ -100,9 +117,14 @@ export default function PortfolioHoneydewFloatingBlock({
           document.body.style.cursor = 'auto'
         }}
       >
+        <sphereGeometry args={[1.15, 16, 16]} />
+        <meshBasicMaterial transparent opacity={0} depthWrite={false} />
+      </mesh>
+      <mesh>
         <planeGeometry args={[1, 1]} />
         <meshBasicMaterial
           map={texture}
+          color={THEME_COLORS[theme]}
           transparent
           side={THREE.DoubleSide}
           depthWrite={false}
